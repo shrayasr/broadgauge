@@ -7,23 +7,27 @@ import json
 
 logger = logging.getLogger(__name__)
 
+
 def oauth_service(service, redirect_uri):
     if service == 'github':
         return GitHub(redirect_uri)
     elif service == 'google':
         return Google(redirect_uri)
 
+
 class GitHub(OAuth2Service):
     """GitHub OAuth integration.
     """
     def __init__(self, redirect_uri):
-        OAuth2Service.__init__(self, 
-            client_id=web.config.github_client_id,
-            client_secret=web.config.github_client_secret,
-            name='github',
-            authorize_url='https://github.com/login/oauth/authorize',
-            access_token_url='https://github.com/login/oauth/access_token',
-            base_url='https://api.github.com/')
+        OAuth2Service.__init__(self,
+                               client_id=web.config.github_client_id,
+                               client_secret=web.config.github_client_secret,
+                               name='github',
+                               authorize_url='https://github.com
+                               /login/oauth/authorize',
+                               access_token_url='https://github.com
+                               /login/oauth/access_token',
+                               base_url='https://api.github.com/')
         self.redirect_uri = redirect_uri
 
     def get_authorize_url(self, **params):
@@ -45,9 +49,11 @@ class GitHub(OAuth2Service):
         try:
             session = self.get_auth_session(data={'code': code})
             d = session.get('user').json()
-            return dict(name=d['name'], email=d['email'], github=d['login'], service='GitHub')
+            return dict(name=d['name'], email=d['email'], github=d['login'],
+                        service='GitHub')
         except KeyError, e:
-            logger.error("failed to get user data from github. Error: %s", str(e))
+            logger.error("failed to get user data from github. Error: %s",
+                         str(e))
 
 
 class Google(OAuth2Service):
@@ -56,12 +62,15 @@ class Google(OAuth2Service):
     def __init__(self, redirect_uri):
         print 'Google', redirect_uri
         OAuth2Service.__init__(self,
-            client_id=web.config.google_client_id,
-            client_secret=web.config.google_client_secret,
-            name='google',
-            authorize_url='https://accounts.google.com/o/oauth2/auth',
-            access_token_url='https://accounts.google.com/o/oauth2/token',
-            base_url='https://www.googleapis.com/oauth2/v1/')
+                               client_id=web.config.google_client_id,
+                               client_secret=web.config.google_client_secret,
+                               name='google',
+                               authorize_url='https://accounts.google.com
+                               /o/oauth2/auth',
+                               access_token_url='https://accounts.google.com
+                               /o/oauth2/token',
+                               base_url='https://www.googleapis.com/
+                               oauth2/v1/')
         self.redirect_uri = redirect_uri
 
     def get_authorize_url(self, **params):
@@ -84,8 +93,10 @@ class Google(OAuth2Service):
         and the auth code must be passed as argument.
         """
         try:
-            session = self.get_auth_session(data={'code': code}, decoder=json.loads)
+            session = self.get_auth_session(data={'code': code},
+                                            decoder=json.loads)
             d = session.get('userinfo').json()
             return dict(name=d['name'], email=d['email'], service='Google')
         except KeyError, e:
-            logger.error("failed to get user data from google. Error: %s", str(e), exc_info=True)
+            logger.error("failed to get user data from google. Error: %s",
+                         str(e), exc_info=True)
