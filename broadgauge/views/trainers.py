@@ -43,7 +43,7 @@ class edit_trainer_profile:
             i = web.input()
         else:
             i = user
-        print i
+
         form = forms.TrainerEditProfileForm(i)
 
         if web.ctx.method == 'POST' and form.validate():

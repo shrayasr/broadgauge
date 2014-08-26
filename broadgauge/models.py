@@ -278,7 +278,6 @@ class Workshop(Model):
 
         # add commenters
         followers.update(c.get_author() for c in self.get_comments())
-        print followers
         return list(followers)
 
     def dict(self):

@@ -110,7 +110,6 @@ class Google(OAuth2Service):
         if 'data' in kwargs and isinstance(kwargs['data'], dict):
             kwargs['data'].setdefault('redirect_uri', self.redirect_uri)
             kwargs['data'].setdefault('grant_type', 'authorization_code')
-            print kwargs
         return OAuth2Service.get_auth_session(self, **kwargs)
 
     def get_userdata(self, code):
